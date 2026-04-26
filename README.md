@@ -53,3 +53,10 @@ This project follows a modular, research-oriented design:
 | 1 | 2D | $4.49 \times 10^{-143}$ | [cite_start]High Jitter Exploration [cite: 2] |
 | 5 | 4D | **4440.515** | [cite_start]Boundary Exploitation [cite: 1, 2] |
 | 8 | 8D | **9.823** | [cite_start]60-Restart Rigorous Search [cite: 1, 2] |
+
+## Project Documentation
+
+To support transparency and reproducibility, this project includes a detailed datasheet and model card as part of the capstone requirements:
+
+* **[Project Datasheet](DataSet.md)** – Detailed information on the data collection, composition, and sampling strategy.
+* **[Model Card](ModelCard.md)** – Technical details of the Bayesian Optimization approach, including the Matern 2.5 kernel and jitter mapping strategy.
