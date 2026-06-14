@@ -1,47 +1,25 @@
-Datasheet: Black-Box Optimization Capstone Project Data Set
+---
 
-This datasheet follows the structured framework for documenting data sets to ensure ethical, practical use and clear communication.
+### 3. Final Production `DataSet.md`
 
-1. Motivation
+```markdown
+# Datasheet: Black-Box Optimization Capstone Project Data Set
 
-Purpose: This data set was created to address a Black-Box Optimization (BBO) challenge, specifically designed for an engineering and data science capstone project.
+This datasheet follows the standard structured framework for documenting machine learning data sets, ensuring reproducibility, transparent data lineage, and ethical data governance.
 
-Task Support: It supports the task of finding the global maximum of eight unknown objective functions (F1–F8) with varying dimensions and characteristics (e.g., noisy vs. smooth surfaces).
+## 1. Motivation
+* **Purpose:** This data set was sequentially generated to benchmark and solve a multi-task Black-Box Optimization (BBO) problem, specifically designed for an advanced machine learning engineering and data science capstone.
+* **Task Support:** The data directly supports sequential model-based optimization tasks, specifically tracking the performance of Gaussian Process Regression (GPR) and Expected Improvement (EI) algorithms in sample-starved environments.
 
+## 2. Composition and Structure
+* **Contents:** The data set contains sequential input-output coordinate pairs for eight distinct optimization tasks (F1–F8).
+  * **Inputs ($X$):** Continuous coordinates formatted as NumPy float64 arrays. Dimensionalities vary by task: F1-F2 (2D), F3 (3D), F4-F5 (4D), F6 (5D), F7 (6D), F8 (8D). All input dimensions are strictly bounded within the normalized unit hypercube $[0.0, 1.0]$.
+  * **Outputs ($Y$):** Single scalar floating-point responses returned directly by the hidden testing environments.
+* **Data Volume:** Contains 12 discrete sequential iterations of sampled data across all 8 functions, building upon the initial seed arrays.
+* **Data Omissions & Sampling Gaps:** The data set contains a deliberate and significant exploitation bias within the high-performing domains (F5, F7, F8). Because late-stage resources were redirected to maximize final scalar rewards along proven paths, massive volumes of the high-dimensional hypercube spaces remain completely unsampled.
 
-2. Composition
-Contents: The data set consists of input-output pairs for eight distinct functions. Inputs are coordinate arrays (ranging from 2 to 8 dimensions), and outputs are scalar values representing the objective function's response.
-Size and Format: It contains 10 iterations (submissions) of data points for each of the 8 functions. The data is stored in .npy (NumPy) format 
+## 3. Collection and Generation Methodology
+* **Generation Framework:** Data points were collected sequentially through a tight closed-loop Bayesian Optimization workflow:
 
-Gaps: There is a significant exploitation bias in high-dimensional functions like F8. Due to the late-stage focus on refining a known peak at 9.9869, vast regions of the 8-dimensional search space remain entirely unexplored.
-
-Relationships: Each instance is linked to a specific iteration of the Bayesian Optimization loop, where previous outputs informed the selection of subsequent inputs.
-3. Collection Process
-
-Query Generation: Queries were generated using a Bayesian Optimization (BO) framework.
-
-Strategy: The process utilized a Gaussian Process Regression (GPR) surrogate model with a Matern 2.5 kernel. The acquisition function was Expected Improvement (EI), optimized via L-BFGS-B with restarts ranging from 150 to 300 to avoid local minima.
-
-Sampling Strategy: A heterogeneous jitter (xi) mapping strategy was used to balance exploration and exploitation.
-
-Exploration: High jitter (xi = 0.50) was used for stagnant functions (F1, F4, F6) to intercept hidden spikes.
-
-Exploitation: Low jitter (xi = 0.001) was used for high-performing functions (F5, F8) to refine known peaks.
-
-Time Frame: Data was collected over a 10-week period  corresponding to the submission cycle of the capstone project.
-
-4. Preprocessing and Uses
-
-Transformations: Input data was normalized to a unit hypercube [0, 1]. For the noisy Function 2, a variance-handling transformation was applied to the GPR model to ensure robustness against stochastic fluctuations.
-
-Intended Uses: This data set is intended for benchmarking Bayesian Optimization algorithms and studying the performance of different acquisition function strategies in restricted-budget environments.
-
-Inappropriate Uses: The data set is not suitable for general-purpose machine learning training outside of the BBO context, as the sampling is highly biased toward objective function peaks rather than representing a uniform distribution of the search space.
-
-5. Distribution and Maintenance
-
-Availability: The data set is currently maintained within a  GitHub repository and a project-specific submission portal.
-
-Terms of Use: Use is restricted to academic review and internal project evaluation. It is not licensed for commercial use at this time.
-
-Maintenance: The data set is not actively maintained or updated as it is for a capstone project
+```text
+[Surrogate fitting (GPR)] ──> [Acquisition Optimization] ──> [Query Generation] ──> [Environment Feedback]
