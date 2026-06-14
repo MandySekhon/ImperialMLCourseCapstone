@@ -52,13 +52,9 @@ During Submission 10, a premature shift to local precision ($\xi = 0.0001$) caus
 
 ## Section 5: Repository Architecture
 ```text
-├── src/
-│   ├── optimizer.py         # Core BayesianOptimizer class implementation
-│   └── acquisition.py       # Expected Improvement (EI) mathematical logic
-├── configs/
-│   └── xi_scheduler.json    # Bimodal hyperparameter maps and noise configurations
-├── function_data/           # Cumulative .npy input-output histories per function
-├── submission_scripts/      # Historic iteration scripts (Submission 1 to 12)
+
+├── function_queries/        # History of query points
+├── submission_scripts/      # Historic iteration scripts 
 ├── README.md                # Comprehensive project documentation
 ├── ModelCard.md             # Technical documentation and operational constraints
 └── DataSet.md               # Data collection lifecycle document
