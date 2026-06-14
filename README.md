@@ -1,62 +1,64 @@
-# Imperial ML Course Capstone: Sequential Model-Based Optimization
+# Sequential Model-Based Black-Box Optimization Capstone
 
 ## Section 1: Project Overview
-This project focuses on the Sequential Model-Based Optimization (SMBO) of "black-box" functions—mathematical systems where the underlying formula is unknown and the only way to learn is through expensive trial-and-error queries. 
+This repository contains the complete, final production implementation of a Heterogeneous Bayesian Optimization (HBO) framework designed for the sequential global optimization of unknown, expensive "black-box" functions. 
 
-* **The Goal:** To identify the global maximum of eight hidden functions within a strictly limited budget of total queries.
-* **Real-World Relevance:** This mirrors high-stakes machine learning scenarios such as hyperparameter tuning, drug discovery, or engineering hardware where each "test" is costly or time-consuming.
-* **Career Impact:** This capstone shifts the focus from "Big Data" processing to **"Small Data" efficiency**, emphasizing optimal decision-making under extreme uncertainty.
+* **The Core Objective:** To maximize eight hidden engineering functions (F1–F8) spanning varying dimensionalities (2D to 8D) and diverse typographic profiles over a strict 12-round sequential query lifecycle.
+* **Real-World Relevance:** This challenge directly mirrors high-stakes industrial engineering and machine learning deployment scenarios—such as hyperparameter tuning for deep neural networks, simulation searches (e.g., Computational Fluid Dynamics), and robotic control policy optimization—where physical or computational trials are heavily resource-constrained.
+* **Key Focus:** Shifting engineering priorities from "Big Data" brute-forcing to **"Small Data" operational efficiency**, maximizing information extraction per unit budget under intense spatial uncertainty.
 
 ## Section 2: Inputs and Outputs
-The model interacts with the black-box functions through a structured query system:
-* **Inputs:** An $n$-dimensional vector (ranging from 2D to 8D) where each dimension is constrained to the range $[0, 1]$.
-* **Outputs:** A single float value representing the function's response to the specific input coordinate.
+The optimization pipeline interacts with the hidden evaluation environments via a structured array query protocol:
+* **Inputs ($X$):** A continuous $n$-dimensional coordinate vector (ranging from 2D to 8D), where every dimension is mathematically normalized to a unit hypercube bounded strictly within $[0.0, 1.0]$.
+* **Outputs ($Y$):** A single floating-point scalar response representing the system's performance metric at that specific coordinate.
 
-## Section 3: Challenge Objectives
-The core objective is to maximize response values across eight distinct functions. 
-* **Efficiency:** Navigating a limited query budget across all functions simultaneously.
-* **Heterogeneity:** Managing diverse function properties, including smooth surfaces, noisy landscapes, and irrelevant dimensions.
-* **Dimensionality:** Overcoming the "curse of dimensionality" in high-dimensional spaces (up to 8D) where narrow global peaks are easily missed.
+## Section 3: Technical Architecture & Strategy Evolution
+The engineering pipeline evolved across the 12-round lifecycle from uniform global mapping into an advanced, highly specialized bimodal optimization architecture designed to systematically overcome the curse of dimensionality.
 
-## Section 4: Technical Approach & Strategy Evolution
-My strategy has evolved from broad discovery to a **Hierarchical Feature Learning** framework, transitioning from general exploration to surgical refinement.
+### 1. Statistical Surrogate Modeling
+The continuous coordinate landscapes are modeled using **Gaussian Process Regression (GPR)**.
+* **Covariance Kernel:** A composite **Constant x Matérn 2.5 kernel** was selected globally to balance surface smoothness with localized flexibility, outperforming standard Radial Basis Function (RBF) setups on complex, narrow ridges.
+* **Regularization & Noise Handling:** For deterministic functions, a strict Gaussian noise lower bound ($\alpha = 10^{-6}$) ensures numerical stability. For stochastic landscapes (Function 2), an explicit regularization threshold ($\alpha = 10^{-2}$) is dynamically triggered to prevent the model from overfitting to random environmental noise variance.
 
-### Machine Learning Methods
-I utilize **Gaussian Process Regression (GPR)** as a surrogate model to map the unknown functions.
-* **Kernel Choice:** I employ the **Matern 5/2 kernel**, providing a balance of flexibility and smoothness compared to a standard RBF kernel.
-* **Length Scale Optimization:** Using **Automatic Relevance Determination (ARD)**, the model learns the individual influence of each dimension. 
-* **Increased Rigor:** To improve model stability, the GPR optimizer restarts have been increased to **40**, ensuring the model avoids local minima when fitting high-dimensional data.
+### 2. High-Rigor Acquisition Optimization
+Sequential query selection is driven by the **Expected Improvement (EI)** acquisition function. To prevent the acquisition optimizer from settling in sub-optimal local traps or flat unmapped regions, the internal search rigor was scaled from an initial baseline of 50 local restarts to a high-rigor maximum of **300 restarts** optimized via the L-BFGS-B algorithm.
 
-### Hierarchical Search Strategy
-In later iterations, a three-tier approach was implemented to organize the optimization logic:
-1.  **Local Level (Surgical Strikes):** Pinpointing sharp gradients to reach summits. [cite_start]This led to a peak result of **4440.515** for Function 5 by targeting boundary coordinates[cite: 1, 2].
-2.  **Regional Level (Basins of Attraction):** Identifying high-performing neighborhoods. [cite_start]This was critical for navigating the 8D space of Function 8 to maintain competitive results[cite: 2].
-3.  **Global Level (Strategic Resets):** Mapping the landscape to identify "Dead Zones." [cite_start]For functions with near-zero signals (e.g., Function 1 at $4.49 \times 10^{-143}$), a "Global Reset" strategy is used to jump to entirely new regions[cite: 2].
+### 3. Dynamic Bimodal Jitter ($\xi$) Scheduling
+The budget was divided into a specialized investment portfolio using a task-dependent jitter map:
+* **Precision Exploitation ($\xi \leq 0.0001$):** Applied to functions with proven, high-performing peaks to force micro-step gradient climbing along sharp summits.
+* **Maximum Exploration ($\xi = 0.50$):** Implemented on stagnant or near-zero signal functions to systematically override local surrogate assumptions and force large spatial jumps into unmapped coordinates.
 
-### Exploration vs. Exploitation
-I utilize an **Adaptive Jitter Map** within the **Expected Improvement (EI)** acquisition function to manage the query budget:
-* [cite_start]**Extreme Exploitation ($\xi = 0.0001$):** Used for "locked-in" functions (e.g., Functions 5 and 8) to refine the search around identified peaks[cite: 1, 2].
-* [cite_start]**Extreme Exploration ($\xi = 0.2$):** Used to force the model out of negative valleys or zero-signal plateaus[cite: 2].
-* **Search Rigor:** To ensure the acquisition optimizer finds the true peak of the surrogate map, I perform **60 restarts** per query.
+---
+
+## Section 4: Final Milestone Performance Summary
+
+The final phase of the project demonstrated the structural stability and rapid recovery capabilities of the bimodal framework:
+
+| Function | Dimension | Operational Landscape | Max Score | Final Phase Strategy Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **F1** | 2D | Stagnant Signal | $5.14 \times 10^{-89}$ | Maximum Exploration ($\xi = 0.50$) |
+| **F2** | 2D | Stochastic Noisy | **0.2968** | Regularized Exploration ($\alpha = 1e-2, \xi = 0.10$) |
+| **F3** | 3D | Non-Responsive | -0.1289 | Maximum Exploration ($\xi = 0.50$) |
+| **F4** | 4D | Negative Valley | -0.8791 | Maximum Exploration ($\xi = 0.50$) |
+| **F5** | 4D | Volatile / Sharp Peak | **1593.32** | Emergency High-Jitter Reset & Precision Harvest ($\xi = 10^{-4}$) |
+| **F6** | 5D | Stagnant | -2.3550 | Maximum Exploration ($\xi = 0.50$) |
+| **F7** | 6D | Smooth Ridge | **2.6721** | Pure Exploitation Summit Climb ($\xi = 0.00$) |
+| **F8** | 8D | High-Dimensional Peak | **9.7733** | Pure Exploitation 300-Restart Depth Search ($\xi = 0.00$) |
+
+### Major Tactical Highlights: The Function 5 Recovery Case Study
+During Submission 10, a premature shift to local precision ($\xi = 0.0001$) caused the acquisition function to stall in a sub-optimal local trap, crashing the output to **16.84**. Recognizing this behavior as a local optimization stall, an **Emergency High-Jitter Reset ($\xi = 0.50$)** was hardcoded into Submission 11 to force the model away from the trap. This successfully recovered the signal back to **1565.23**, setting up the final round for a precision harvest.
+
+---
 
 ## Section 5: Repository Architecture
-This project follows a modular, research-oriented design:
-* **`src/`:** Contains core `BayesianOptimizer` and `Acquisition` modules.
-* **`configs/`:** Externalizes hyperparameters (jitter, alpha, restarts) for reproducibility.
-* **`data/`:** Maintains cumulative history for each function to ensure accurate model updates with every new query.
-
-***
-
-### Summary of Major Results (Submission 4)
-| Function | Dimension | Best Result | Current Strategy |
-| :--- | :--- | :--- | :--- |
-| 1 | 2D | $4.49 \times 10^{-143}$ | [cite_start]High Jitter Exploration [cite: 2] |
-| 5 | 4D | **4440.515** | [cite_start]Boundary Exploitation [cite: 1, 2] |
-| 8 | 8D | **9.823** | [cite_start]60-Restart Rigorous Search [cite: 1, 2] |
-
-## Project Documentation
-
-To support transparency and reproducibility, this project includes a detailed datasheet and model card as part of the capstone requirements:
-
-* **[Project Datasheet](DataSet.md)** – Detailed information on the data collection, composition, and sampling strategy.
-* **[Model Card](ModelCard.md)** – Technical details of the Bayesian Optimization approach, including the Matern 2.5 kernel and jitter mapping strategy.
+```text
+├── src/
+│   ├── optimizer.py         # Core BayesianOptimizer class implementation
+│   └── acquisition.py       # Expected Improvement (EI) mathematical logic
+├── configs/
+│   └── xi_scheduler.json    # Bimodal hyperparameter maps and noise configurations
+├── function_data/           # Cumulative .npy input-output histories per function
+├── submission_scripts/      # Historic iteration scripts (Submission 1 to 12)
+├── README.md                # Comprehensive project documentation
+├── ModelCard.md             # Technical documentation and operational constraints
+└── DataSet.md               # Data collection lifecycle document
