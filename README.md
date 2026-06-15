@@ -55,6 +55,7 @@ During Submission 10, a premature shift to local precision ($\xi = 0.0001$) caus
 
 ├── function_queries/        # History of query points
 ├── submission_scripts/      # Historic iteration scripts 
+├── notebooks/               # corresponding notebooks
 ├── README.md                # Comprehensive project documentation
 ├── ModelCard.md             # Technical documentation and operational constraints
 └── DataSet.md               # Data collection lifecycle document
