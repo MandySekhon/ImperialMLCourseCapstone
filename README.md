@@ -4,7 +4,7 @@
 This repository contains the complete, final production implementation of a Heterogeneous Bayesian Optimization (HBO) framework designed for the sequential global optimization of unknown, expensive "black-box" functions. 
 
 * **The Core Objective:** To maximize eight hidden engineering functions (F1–F8) spanning varying dimensionalities (2D to 8D) and diverse typographic profiles over a strict 12-round sequential query lifecycle.
-* **Real-World Relevance:** This challenge directly mirrors high-stakes industrial engineering and machine learning deployment scenarios—such as hyperparameter tuning for deep neural networks, simulation searches (e.g., Computational Fluid Dynamics), and robotic control policy optimization where physical or computational trials are heavily resource-constrained.
+* **Real-World Relevance:** This challenge directly mirrors high-stakes industrial engineering and machine learning deployment scenarios such as hyperparameter tuning for deep neural networks, simulation searches (e.g., Computational Fluid Dynamics), and robotic control policy optimization where physical or computational trials are heavily resource-constrained.
 * **Key Focus:** Shifting engineering priorities from "Big Data" brute-forcing to **"Small Data" operational efficiency**, maximizing information extraction per unit budget under intense spatial uncertainty.
 
 ## Section 2: Inputs and Outputs
@@ -55,7 +55,7 @@ During Submission 10, a premature shift to local precision ($\xi = 0.0001$) caus
 
 ├── function_queries/        # History of query points
 ├── submission_scripts/      # Historic iteration scripts 
-├── notebooks/               # corresponding notebooks
+├── notebooks/               # Corresponding notebooks
 ├── README.md                # Comprehensive project documentation
 ├── ModelCard.md             # Technical documentation and operational constraints
 └── DataSet.md               # Data collection lifecycle document
